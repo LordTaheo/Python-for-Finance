@@ -1,0 +1,19 @@
+#A quite common task in financial analytics is to evaluate complex mathematical
+expressions on large arrays of numbers. To this end, Python itself provides everything
+needed:
+In [1]: loops = 25000000
+from math import *
+a = range(1, loops)
+def f(x):
+return 3 * log(x) + cos(x) ** 2
+%timeit r = [f(x) for x in a]
+Out[1]: 1 loops, best of 3: 15 s per loop
+The Python interpreter needs 15 seconds in this case to evaluate the function f 25,000,000
+times.
+The same task can be implemented using NumPy, which provides optimized (i.e., precompiled),
+functions to handle such array-based operations:
+In [2]: import numpy as np
+a = np.arange(1, loops)
+%timeit r = 3 * np.log(a) + np.cos(a) ** 2
+Out[2]: 1 loops, best of 3: 1.69 s per loop
+Using NumPy considerably reduces the execution time to 1.7 seconds.
