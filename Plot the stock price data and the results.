@@ -1,0 +1,25 @@
+##First, make sure to have available all necessary libraries:
+In [1]: import numpy as np
+import pandas as pd
+import pandas.io.data as web
+##Second, retrieve the data from, say, Google itself:
+In [2]: goog = web.DataReader(‘GOOG’, data_source=‘google’,
+start=‘3/14/2009’, end=‘4/14/2014’)
+goog.tail()
+Out[2]: Open High Low Close Volume
+Date
+2014-04-08 542.60 555.00 541.61 554.90 3152406
+2014-04-09 559.62 565.37 552.95 564.14 3324742
+2014-04-10 565.00 565.00 539.90 540.95 4027743
+2014-04-11 532.55 540.00 526.53 530.60 3916171
+2014-04-14 538.25 544.10 529.56 532.52 2568020
+5 rows × 5 columns
+##Third, implement the necessary analytics for the volatilities:
+In [3]: goog[‘Log_Ret’] = np.log(goog[‘Close’] / goog[‘Close’].shift(1))
+goog[‘Volatility’] = pd.rolling_std(goog[‘Log_Ret’],
+window=252) * np.sqrt(252)
+##Fourth, plot the results. To generate an inline plot, we use the IPython magic command
+%matplotlib with the option inline:
+In [4]: %matplotlib inline
+goog[[‘Close’, ‘Volatility’]].plot(subplots=True, color=‘blue’,
+figsize=(8, 6))
